@@ -25,9 +25,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     {
         $algo = 'sha256';
         $key = 'E26m218TLqgJeY40ydCET10tMUD6qSlV';
-        $nonce = 'Z6vsz6UqTtqYcPy4TRinVtb8ShsVvDvq';
         $value = 'hello world!';
-        $hmac = hash_hmac($algo, $key, $nonce.$value);
 
         $validation = new Validation($key, $algo);
 
