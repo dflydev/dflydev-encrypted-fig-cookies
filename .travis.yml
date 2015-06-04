@@ -1,0 +1,33 @@
+language: php
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7
+  - hhvm
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+matrix:
+  allow_failures:
+    - php: hhvm
+
+before_script:
+  - composer self-update
+  - composer install --dev --prefer-source
+
+script:
+  - ./vendor/bin/phpunit --coverage-clover=coverage.clover
+  - ./vendor/bin/phpcs --standard=PSR2 src
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - CODECLIMATE_REPO_TOKEN=a6c3fe945c8b82dfc203abaf185a8773859ea2099f2a813a301f791d46e1905f ./vendor/bin/test-reporter --coverage-report=coverage.clover
+
+notifications:
+  email: true
