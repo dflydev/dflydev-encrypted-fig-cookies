@@ -9,10 +9,6 @@ class ZendFilterEncryptionTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
-        if (! class_exists('Zend\Filter\Encrypt')) {
-            $this->markTestSkipped('Missing zendframework/zend-filter');
-        }
-
         if (! class_exists('Zend\Crypt\BlockCipher')) {
             $this->markTestSkipped('Missing zendframework/zend-crypt');
         }
@@ -24,7 +20,7 @@ class ZendFilterEncryptionTest extends \PHPUnit_Framework_TestCase
     public function it_encrypts_and_decrypts_successfully()
     {
 
-        $encryption = new ZendFilterEncryption(
+        $encryption = new ZendCryptEncryption(
             new Decrypt(['key' => 'asdf']),
             new Encrypt(['key' => 'asdf'])
         );
@@ -39,7 +35,7 @@ class ZendFilterEncryptionTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_does_not_encrypt_and_decrypt_successfully()
     {
-        $encryption = new ZendFilterEncryption(
+        $encryption = new ZendCryptEncryption(
             new Decrypt(['key' => 'asdf']),
             new Encrypt(['key' => 'ASDF'])
         );

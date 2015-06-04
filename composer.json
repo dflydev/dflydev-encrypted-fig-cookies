@@ -21,7 +21,6 @@
     "require-dev": {
         "phpseclib/phpseclib": "^0.3.10",
         "zendframework/zend-crypt": "^2.0",
-        "zendframework/zend-filter": "^2.0",
         "defuse/php-encryption": "^1.2",
 
         "codeclimate/php-test-reporter": "~0.1@dev",

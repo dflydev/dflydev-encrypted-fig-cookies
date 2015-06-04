@@ -6,7 +6,7 @@ use Dflydev\EncryptedFigCookies\Encryption\Encryption;
 use Zend\Filter\Decrypt;
 use Zend\Filter\Encrypt;
 
-class ZendFilterEncryption implements Encryption
+class ZendCryptEncryption implements Encryption
 {
     /**
      * @var Decrypt
