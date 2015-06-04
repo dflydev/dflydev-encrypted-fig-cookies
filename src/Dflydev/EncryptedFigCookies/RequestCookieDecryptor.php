@@ -3,6 +3,7 @@
 namespace Dflydev\EncryptedFigCookies;
 
 use Dflydev\EncryptedFigCookies\Encryption\Decryptor;
+use Dflydev\EncryptedFigCookies\Validation\Validation;
 use Dflydev\FigCookies\Cookies;
 use Psr\Http\Message\RequestInterface;
 
@@ -13,9 +14,15 @@ class RequestCookieDecryptor
      */
     private $decryptor;
 
-    public function __construct(Decryptor $decryptor)
+    /**
+     * @var Validation
+     */
+    private $validation;
+
+    public function __construct(Decryptor $decryptor, Validation $validaton)
     {
         $this->decryptor = $decryptor;
+        $this->validation = $validaton;
     }
 
     private static function resolveCookieNames($cookieNames)
@@ -52,8 +59,10 @@ class RequestCookieDecryptor
         }
 
         $cookie = $cookies->get($cookieName);
-        $encryptedValue = $cookie->getValue();
-        $decryptedValue = $this->decryptor->decrypt(base64_decode($encryptedValue));
+        $encodedValue = $cookie->getValue();
+        $signedValue = base64_decode($encodedValue);
+        $encryptedValue = $this->validation->extract($signedValue);
+        $decryptedValue = $this->decryptor->decrypt($encryptedValue);
         $decryptedCookie = $cookie->withValue($decryptedValue);
 
         return $cookies->with($decryptedCookie);

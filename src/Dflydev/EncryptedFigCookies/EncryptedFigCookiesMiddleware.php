@@ -5,6 +5,7 @@ namespace Dflydev\EncryptedFigCookies;
 use Dflydev\EncryptedFigCookies\Encryption\Decryptor;
 use Dflydev\EncryptedFigCookies\Encryption\Encryption;
 use Dflydev\EncryptedFigCookies\Encryption\Encryptor;
+use Dflydev\EncryptedFigCookies\Validation\Validation;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -50,20 +51,25 @@ class EncryptedFigCookiesMiddleware
     public static function createWithDecryptorAndEncryptor(
         Decryptor $decryptor,
         Encryptor $encryptor,
+        Validation $validation,
         $cookieNames
     ) {
         return new static(
-            new RequestCookieDecryptor($decryptor),
-            new ResponseCookieEncryptor($encryptor),
+            new RequestCookieDecryptor($decryptor, $validation),
+            new ResponseCookieEncryptor($encryptor, $validation),
             $cookieNames
         );
     }
 
-    public static function createWithEncryption(Encryption $encryption, $cookieNames)
-    {
+    public static function createWithEncryption(
+        Encryption $encryption,
+        Validation $validation,
+        $cookieNames
+    ) {
         return static::createWithDecryptorAndEncryptor(
             $encryption,
             $encryption,
+            $validation,
             $cookieNames
         );
     }

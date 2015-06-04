@@ -3,6 +3,7 @@
 namespace Dflydev\EncryptedFigCookies;
 
 use Dflydev\EncryptedFigCookies\Encryption\Encryptor;
+use Dflydev\EncryptedFigCookies\Validation\Validation;
 use Dflydev\FigCookies\SetCookies;
 use Psr\Http\Message\ResponseInterface;
 
@@ -13,9 +14,15 @@ class ResponseCookieEncryptor
      */
     private $encryptor;
 
-    public function __construct(Encryptor $encryptor)
+    /**
+     * @var Validation
+     */
+    private $validation;
+
+    public function __construct(Encryptor $encryptor, Validation $validation)
     {
         $this->encryptor = $encryptor;
+        $this->validation = $validation;
     }
 
     private static function resolveCookieNames($cookieNames)
@@ -54,7 +61,9 @@ class ResponseCookieEncryptor
         $cookie = $setCookies->get($cookieName);
         $decryptedValue = $cookie->getValue();
         $encryptedValue = $this->encryptor->encrypt($decryptedValue);
-        $encryptedCookie = $cookie->withValue(base64_encode($encryptedValue));
+        $signedValue = $this->validation->sign($encryptedValue);
+        $encodedValue = base64_encode($signedValue);
+        $encryptedCookie = $cookie->withValue($encodedValue);
 
         return $setCookies->with($encryptedCookie);
     }
