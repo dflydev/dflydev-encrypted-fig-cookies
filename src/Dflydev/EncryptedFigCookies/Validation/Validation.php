@@ -7,6 +7,9 @@ class Validation
     const DEFAULT_ALGO = 'sha256';
     const NONCE_LENGTH = 32;
 
+    private $key;
+    private $algo;
+
     public function __construct($key, $algo = null)
     {
         $this->key = $key;
