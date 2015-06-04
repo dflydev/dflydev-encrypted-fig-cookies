@@ -30,9 +30,9 @@ class RequestCookieDecryptor
 
     public function decrypt(RequestInterface $request, $cookieNames)
     {
-        $cookieNames = static::resolveCookieNames($cookieNames);
+        $cookieNames = self::resolveCookieNames($cookieNames);
 
-        if (static::hasNoCookieNames($cookieNames)) {
+        if (self::hasNoCookieNames($cookieNames)) {
             return $request;
         }
 

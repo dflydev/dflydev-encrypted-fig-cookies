@@ -30,9 +30,9 @@ class ResponseCookieEncryptor
 
     public function encrypt(ResponseInterface $response, $cookieNames)
     {
-        $cookieNames = static::resolveCookieNames($cookieNames);
+        $cookieNames = self::resolveCookieNames($cookieNames);
 
-        if (static::hasNoCookieNames($cookieNames)) {
+        if (self::hasNoCookieNames($cookieNames)) {
             return $response;
         }
 
